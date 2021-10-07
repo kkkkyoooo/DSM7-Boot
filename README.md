@@ -3,13 +3,12 @@
 
 #### 适用于PVE虚拟机的黑群晖7.x的引导镜像
 
+* DS918+
 
+* 常规创建一个PVE虚拟机，创建完成后，别开机，WinScp登录PVE：
 
-* 常规创建一个PVE虚拟机，创建完成后，别开机，登录PVE的SSH：
+编辑 /etc/pve/qemu-server/102.conf
 
-```
-vi /etc/pve/qemu-server/102.conf
-```
 ps：102 为群晖虚拟机ID，根据实际情况更改
 
 添加下面的一长串代码：
@@ -17,6 +16,8 @@ ps：102 为群晖虚拟机ID，根据实际情况更改
 ```
 args: -device 'qemu-xhci,addr=0x18' -drive 'id=synoboot,file=/root/synoboot7.img,if=none,format=raw' -device 'usb-storage,id=synoboot,drive=synoboot,bootindex=5'
 ```
+
+然后保存
 
 * /root/synoboot7.img  在root目录下放群晖引导镜像
 
