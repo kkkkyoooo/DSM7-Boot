@@ -1,28 +1,25 @@
 # Synology7-Boot
 
+#### 本镜像仅作测试之用，若您下载，请24小时内删除。
 
-#### 适用于PVE虚拟机的黑群晖7.x的引导镜像
+#### 本项目发布的镜像默认仅适合PVE！若是其他自行查询相关教程！
 
+#### PVE虚拟机安装黑群晖7.x简单教程
 
+* DS918+
 
-* 常规创建一个PVE虚拟机，创建完成后，别开机，登录PVE的SSH：
+* 常规创建一个PVE虚拟机，创建完成后，别开机，WinScp登录PVE；
 
+* 上传引导镜像：/root/synoboot7.img；
+
+* 登录到SSH终端，运行：(102为虚拟机ID，自行修改)
 ```
-vi /etc/pve/qemu-server/102.conf
-```
-ps：102 为群晖虚拟机ID，根据实际情况更改
-
-添加下面的一长串代码：
-
-```
-args: -device 'qemu-xhci,addr=0x18' -drive 'id=synoboot,file=/root/synoboot7.img,if=none,format=raw' -device 'usb-storage,id=synoboot,drive=synoboot,bootindex=5'
+qm importdisk 102 synoboot7.img local-lvm
 ```
 
-* /root/synoboot7.img  在root目录下放群晖引导镜像
+* 回到PVE，添加未使用的硬盘，设置为SATA的硬盘，并将此硬盘设置为第一启动；
 
-* 回到PVE，添加SATA的硬盘，并添加3个串口，启动DSM7
+* 启动DSM7，输入网址 http://find.synology.cn/ 查找设备
 
-ps：现在来说，串口可添加，可不添加
-
-* 输入网址 http://find.synology.cn/ 查找设备
+详细教程可参考[GXNAS保姆教程](https://wp.gxnas.com/11213.html)
 
