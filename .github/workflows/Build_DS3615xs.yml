@@ -1,0 +1,53 @@
+name: Build_DS3615xs
+
+on: 
+  repository_dispatch:
+  workflow_dispatch:
+  
+
+jobs:
+  Build_DS3615xs:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Start
+      uses: actions/checkout@v2
+
+        
+    - name: Build DS3615xs
+      run: |    
+        cd redpill-tool-chain
+               
+        ./redpill_tool_chain.sh build bromolow-6.2.4-25556 && ./redpill_tool_chain.sh auto bromolow-6.2.4-25556 && ./redpill_tool_chain.sh build bromolow-7.0-41222 && ./redpill_tool_chain.sh auto bromolow-7.0-41222 && ./redpill_tool_chain.sh build bromolow-7.0.1-42218 && ./redpill_tool_chain.sh auto bromolow-7.0.1-42218
+       
+    - name: Organize files
+      id: assemble_artifact
+      run: |
+        rm -rf ./DSM7_Out
+        mkdir -p ./DSM7_Out/
+        sudo chmod -R 777 redpill-tool-chain/images    
+        mv redpill-tool-chain/images/*.img ./DSM7_Out/
+                                
+               
+    - name: Upload
+      uses: actions/upload-artifact@main
+      with:
+        name: DS3615xs_Boot_image
+        path: DSM7_Out/*.img
+
+    - name: Generate Tag & Release Name
+      id: generate_name
+      run: |
+        time=$(date +%Y%m%d%H%M)
+        release_tag="$time"
+        release_name="DS3615xs_Boot_image-$(date +%Y%m%d)"
+        echo "##[set-output name=release_name;]$release_name"
+        echo "##[set-output name=release_tag;]$release_tag"        
+
+    - name: Create Release & Upload
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: DSM7_Out/*.img
+        name: ${{ steps.generate_name.outputs.release_name }}
+        tag: ${{ steps.generate_name.outputs.release_tag }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+                 
