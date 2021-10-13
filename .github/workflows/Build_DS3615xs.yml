@@ -9,7 +9,7 @@ jobs:
   Build_DS3615xs:
     runs-on: ubuntu-latest
     steps:
-    - name: Clone Repository
+    - name: Start
       uses: actions/checkout@v2
 
         
@@ -19,7 +19,7 @@ jobs:
                
         ./redpill_tool_chain.sh build bromolow-6.2.4-25556 && ./redpill_tool_chain.sh auto bromolow-6.2.4-25556 && ./redpill_tool_chain.sh build bromolow-7.0-41222 && ./redpill_tool_chain.sh auto bromolow-7.0-41222 && ./redpill_tool_chain.sh build bromolow-7.0.1-42218 && ./redpill_tool_chain.sh auto bromolow-7.0.1-42218
        
-    - name: Assemble Artifact
+    - name: Organize files
       id: assemble_artifact
       run: |
         rm -rf ./DSM7_Out
